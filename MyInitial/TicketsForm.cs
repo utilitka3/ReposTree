@@ -7,43 +7,59 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Ticketing
-{
-    public partial class TicketsForm : Form
+
+
+    namespace Ticketing
     {
-        TicketPrice mTicketPrice;
-        int mSection = 2;
-        int mQuantity = 0;
-        bool mDiscount = false;
-
-        public TicketsForm()
+        public partial class TicketsForm : Form
         {
-            InitializeComponent();
-        }
+            TicketPrice mTicketPrice;
+            int mSection = 2;
+            int mQuantity = 0;
+            int mDiscount = 0;
 
-        private void TicketsForm_Load(object sender, EventArgs e)
-        {
+            public TicketsForm()
+            {
+                InitializeComponent();
+            }
 
-        }
+            private void TicketsForm_Load(object sender, EventArgs e)
+            {
 
-        private void cmdCalculate_Click(object sender, EventArgs e)
-        {
-            mQuantity = int.Parse(txtQuantity.Text);
+            }
 
-            if (chkDiscount.Checked)
-                { mDiscount = true; }
+            private void cmdCalculate_Click(object sender, EventArgs e)
+            {
+                mQuantity = int.Parse(txtQuantity.Text);
 
-            if (radBalcony.Checked)
+                if (chkDiscount.Checked)
+                { mDiscount = 1; }
+                else if (chckChild.Checked)
+                { mDiscount = 2; }
+                else if (!chkDiscount.Checked && !chckChild.Checked)
+                { mDiscount = 0; }
+
+                if (radBalcony.Checked)
                 { mSection = 1; }
-            if (radGeneral.Checked)
+                if (radGeneral.Checked)
                 { mSection = 2; }
-            if (radBox.Checked)
+                if (radBox.Checked)
                 { mSection = 3; }
 
-            mTicketPrice = new TicketPrice(mSection, mQuantity, mDiscount);
+                mTicketPrice = new TicketPrice(mSection, mQuantity, mDiscount);
 
-            mTicketPrice.calculatePrice();
-            lblAmount.Text = System.Convert.ToString(mTicketPrice.AmountDue);
+                mTicketPrice.calculatePrice();
+                lblAmount.Text = System.Convert.ToString(mTicketPrice.AmountDue);
+            }
+
+            private void chckDiscount_CheckedChanged(object sender, EventArgs e)
+            {
+                chckChild.Checked = false;
+            }
+
+            private void chckChild_CheckedChanged(object sender, EventArgs e)
+            {
+                chkDiscount.Checked = false;
+            }
         }
-     }
-}
+    }
